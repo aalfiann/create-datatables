@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Example DataTables with Bulma</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- Bulma Version 0.9.0-->
+        <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" />
+        <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
+        <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.8.55/css/materialdesignicons.min.css">
+    </head>
+    <body>
+        <section class="hero is-info is-medium is-bold">
+            <div class="hero-head">
+                <nav class="navbar">
+                    <div class="container">
+                        <div class="navbar-brand">
+                            <a class="navbar-item" href="../">
+                                <img src="http://bulma.io/images/bulma-type-white.png" alt="Logo">
+                            </a>
+                            <span class="navbar-burger burger" data-target="navbarMenu">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </section>
+        <section class="container">
+            
+            <div class="sandbox">
+                <div class="content">
+                    <div class="card has-table has-mobile-sort-spaced">
+                        <header class="card-header">
+                          <p class="card-header-title">
+                            <span class="icon"><i class="mdi mdi-format-list-bulleted"></i></span>
+                            DataTables
+                          </p>
+                          <div class="card-header-icon field">
+                            <p class="control has-icons-right">
+                              <input id="search" type="text" class="input" placeholder="Search & Enter">
+                              <span class="icon is-small is-right">
+                                <i class="mdi mdi-magnify"></i>
+                              </span>
+                            </p>
+                          </div>
+                        </header>
+                        <div class="card-content">
+                            <div id="datatable"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        
+        <footer class="footer">
+            <div class="container">
+                
+                <div class="content has-text-centered">
+                    <p>
+                        <a class="icon" href="https://github.com/aalfiann/create-datatables">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </p>
+                    <div class="control level-item">
+                        <a href="https://bulma.io">
+                            <img src="https://bulma.io/images/made-with-bulma.png" alt="Made with Bulma" width="128" height="24">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <script src="https://cdn.jsdelivr.net/npm/reefjs/dist/reef.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fdaciuk-ajax/3.0.4/ajax.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.10.0/dist/flyjson.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chunk-handler@1.3.0/dist/chunkhandler.min.js"></script>
+        <script>
+            // Default configuration table
+            var dt = [];
+            var pageNow = 1;
+            var itemPerPage = 5;
+            var totalPage = 1;
+
+            // Reactive UI
+            var datatable = new Reef('#datatable', {
+                data: {
+                    table : [],
+                    message: '',
+                    pageNow: pageNow,
+                    totalPage: totalPage
+                },
+                template: function(props) {
+                    if(props.table.length > 0) {
+                        // generate option for jump page
+                        var tpage = '';
+                        for (var i=1;i<=totalPage;i++) {
+                            // if current i same as pagenow then add attribute selected
+                            tpage += '<option '+(i === pageNow ? 'selected':'')+'>'+i+'</option>';
+                        }
+                        return `<div class="b-table has-pagination">
+                        <div class="table-wrapper has-mobile-cards">
+                            <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>ID</th>
+                                        <th>UserID</th>
+                                        <th>Title</th>
+                                        <th>Body</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                ${props.table.map(function(item, index) {
+                                    var num = (index+1);
+                                    return `<tr>
+                                    <td data-label="No">${num+((props.pageNow-1)*itemPerPage)}</td>
+                                    <td data-label="ID">${item.id}</td>
+                                    <td data-label="UserID">${item.userId}</td>
+                                    <td data-label="Title">${item.title}</td>
+                                    <td data-label="Body">${item.body}</td>
+                                    <td class="is-actions-cell">
+                                        <div class="buttons is-right">
+                                        <button class="button is-small is-primary" type="button" title="Edit Post">
+                                            <span class="icon"><i class="mdi mdi-pencil-outline"></i></span>
+                                        </button>
+                                        <button class="button is-small is-danger" type="button" title="Delete Post">
+                                            <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                                        </button>
+                                        </div>
+                                    </td>
+                                    </tr>`;
+                                }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="notification is-white">
+                            <div class="level">
+                                <div class="level-left">
+                                    <div class="level-item">
+                                        Page 
+                                        <div class="select ml-2">
+                                            <select id="jumpPage" onchange="jumpPage(this)">${tpage}</select>
+                                        </div>
+                                    </div>
+                                    <div class="level-item">
+                                        <div class="buttons has-addons">
+                                            <button type="button" class="button" onclick="prevPage()"><i class="mdi mdi-arrow-left-bold mr-2"></i>Prev</button>
+                                            <button type="button" class="button" onclick="nextPage()">Next<i class="mdi mdi-arrow-right-bold ml-2"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="level-item">
+                                    <small class="mt-2">Page ${props.pageNow} of ${props.totalPage}</small>
+                                </div>
+                                <div class="level-right">
+                                    <div class="level-item">
+                                        Item per page
+                                        <div class="select ml-2">
+                                            <select id="itemperpage" onchange="setItemPerPage(this)">
+                                                <option>5</option>
+                                                <option>10</option>
+                                                <option>25</option>
+                                                <option>50</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>`;
+                    } else {
+                        return `<article class="message is-danger">
+                            <div class="message-body">
+                            ${(props.message) ? props.message : 'Loading data...'}
+                            </div>
+                        </article>`;
+                    }
+                }
+            });
+            datatable.render();
+
+            // Get Remote Data only once then saved to dt variable
+            function loadData(_cb) {
+                if(dt.length === 0) {
+                    ajax()
+                    .get('https://jsonplaceholder.typicode.com/posts')
+                    .then(function(response, xhr) {
+                    if(response.length > 0) {
+                        dt = response;
+                        if(_cb && typeof _cb === "function") {
+                            _cb(null,dt);
+                        }
+                    }
+                        return dt;
+                    })
+                    .catch(function(response, xhr) {
+                        dt = [];
+                        if(_cb && typeof _cb === "function") {
+                            _cb(xhr.responseText,null);
+                        } else {
+                            return dt;
+                        }
+                    })
+                }
+                return dt;
+            }
+
+            // Search All field
+            function searchData(value,pageNow,itemPerPage) {
+                if(dt.length > 0) {
+                    // Find data
+                    var nosql = new FlyJson();
+                    var result = nosql.set(dt)
+                    .begin()
+                    .where('userId', 'like', value, false)
+                    .or()
+                    .where('id', 'like', value, false)
+                    .or()
+                    .where('title', 'like', value, false)
+                    .or()
+                    .where('body', 'like', value, false)
+                    .end()
+                    .distinct()
+                    .exec();
+                    
+                    // Get total page from the result of find data
+                    var ch = new ChunkHandler();
+                    var retotalPage = ch.make(result,itemPerPage).length;
+
+                    // Paginate the data
+                    var redata = nosql.set(result).paginate(pageNow,itemPerPage).exec();
+                    // Inject to reactive datatable ui
+                    if (redata.length > 0) {
+                        datatable.data.table = redata;
+                        datatable.data.pageNow = pageNow;
+                        datatable.data.totalPage = retotalPage;
+                        totalPage = retotalPage;
+                    } else {
+                        datatable.data.table = [];
+                        datatable.data.pageNow = 0;
+                        datatable.data.totalPage = 0;
+                        totalPage = 0;
+                        datatable.data.message = 'Records not found!';
+                    }
+                } else {
+                    datatable.data.table = [];
+                    datatable.data.pageNow = 0;
+                    datatable.data.totalPage = 0;
+                    totalPage = 0;
+                    datatable.data.message = 'Records not found!';
+                }
+            }
+
+            // Load data onload
+            loadData(function(err,data) {
+                if(!err) searchData('',pageNow,itemPerPage);
+            });
+
+            // Next Page
+            function nextPage() {
+                if(pageNow < totalPage) {
+                    pageNow = pageNow + 1;
+                    searchData(document.getElementById('search').value,pageNow,itemPerPage);
+                }
+            }
+
+            // Previous Page
+            function prevPage() {
+                if(pageNow > 1) {
+                    pageNow = pageNow - 1;
+                    searchData(document.getElementById('search').value,pageNow,itemPerPage);
+                }
+            }
+
+            // Refresh Item Per Page
+            function setItemPerPage(self) {
+                pageNow = 1;
+                itemPerPage = self.options[self.selectedIndex].value;
+                searchData(document.getElementById('search').value,pageNow,itemPerPage);
+            }
+
+            // Go / Jump to page
+            function jumpPage(self) {
+                pageNow = parseInt(self.value);
+                searchData(document.getElementById('search').value,pageNow,itemPerPage);
+            }
+
+            // Event listener when search box is entered
+            document.getElementById('search').addEventListener('keyup', function(e) {
+                if (e.keyCode === 13) {
+                    pageNow = 1;
+                    searchData(this.value, pageNow, itemPerPage);
+                }
+            })
+        </script>
+    </body>
+</html>
