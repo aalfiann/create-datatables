@@ -28,11 +28,11 @@ Total size is 11.1 kB (minified and gzipped).
 - Flexible, you design it by yourself.
 - Etc
 
-### Const of using this
+### Cons of using this
 - You required to learn all libraries in this example.
 - This is only simple example to make you easier to understanding code. So you have to modify this by yourself.
 
 ### Alternative
 [Simple-DataTables (13 kB)](https://github.com/fiduswriter/Simple-DataTables).
 
-I would say that this Simple-DataTables is better. All the most important features has been there but in my opinion still not flexible, maybe I just can't understanding well because it's lack of examples. This depends on how complicated your current project.
+I would say that this Simple-DataTables is better. All the most important features has been there but in my opinion still not flexible, I have read all the documentation and maybe I just can't understanding it well because it's lack of examples. This depends on how complicated your current project.
