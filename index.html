@@ -81,10 +81,10 @@
         <script src="https://cdn.jsdelivr.net/npm/chunk-handler@1.3.0/dist/chunkhandler.min.js"></script>
         <script>
             // Default configuration table
-            var dt = [];
-            var pageNow = 1;
-            var itemPerPage = 5;
-            var totalPage = 1;
+            var dt = [];            // The data loaded from ajax will be cached at here.
+            var pageNow = 1;        // Set current page to default 1
+            var itemPerPage = 5;    // Set item per page to default 5
+            var totalPage = 1;      // Set total page to default 1
 
             // Reactive UI
             var datatable = new Reef('#datatable', {
@@ -182,6 +182,8 @@
                     }
                 }
             });
+
+            // Render to make UI reactive
             datatable.render();
 
             // Get Remote Data only once then saved to dt variable
@@ -215,6 +217,8 @@
                 if(dt.length > 0) {
                     // Find data
                     var nosql = new FlyJson();
+                    // I use Fly Json ODM to manipulation json on the fly.
+                    // This will query search for all fields.
                     var result = nosql.set(dt)
                     .begin()
                     .where('userId', 'like', value, false)
@@ -234,6 +238,7 @@
 
                     // Paginate the data
                     var redata = nosql.set(result).paginate(pageNow,itemPerPage).exec();
+                    // If the data records found
                     // Inject to reactive datatable ui
                     if (redata.length > 0) {
                         datatable.data.table = redata;
@@ -255,11 +260,6 @@
                     datatable.data.message = 'Records not found!';
                 }
             }
-
-            // Load data onload
-            loadData(function(err,data) {
-                if(!err) searchData('',pageNow,itemPerPage);
-            });
 
             // Next Page
             function nextPage() {
@@ -297,6 +297,11 @@
                     searchData(this.value, pageNow, itemPerPage);
                 }
             })
+
+            // Load data onload
+            loadData(function(err,data) {
+                if(!err) searchData('',pageNow,itemPerPage);
+            });
         </script>
     </body>
 </html>

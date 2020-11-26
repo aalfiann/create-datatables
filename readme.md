@@ -1,7 +1,7 @@
 # Create DataTables
 Create your own DataTables with Vanilla JavaScript.
 
-[Demo](https://jsfiddle.net/aalfiann/d0kpbwzt/4/)
+[Demo](https://jsfiddle.net/aalfiann/d0kpbwzt/10/)
 
 ### Why ?
 Because DataTables.net is :
@@ -35,4 +35,4 @@ Total size is 11.1 kB (minified and gzipped).
 ### Alternative
 [Simple-DataTables (13 kB)](https://github.com/fiduswriter/Simple-DataTables).
 
-I would say that this Simple-DataTables is better. But the Ajax feature is only GET method So I can't use it for project with complicated and secured Rest API. Hope they will updated it soon.
+I would say that this Simple-DataTables is better. All the most important features has been there but in my opinion still not flexible, maybe I just can't understanding well because it's lack of examples. This depends on how complicated your current project.
