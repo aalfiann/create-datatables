@@ -220,17 +220,19 @@
                     // I use Fly Json ODM to manipulation json on the fly.
                     // This will query search for all fields.
                     var result = nosql.set(dt)
-                    .begin()
-                    .where('userId', 'like', value, false)
+                    .select(['userId','id','title','body'])     // Edit this to swap the columns
+                    .begin()                                    // Condition begin
+                    .where('userId', 'like', value, false)      // Search field userId
                     .or()
-                    .where('id', 'like', value, false)
+                    .where('id', 'like', value, false)          // Search field id
                     .or()
-                    .where('title', 'like', value, false)
+                    .where('title', 'like', value, false)       // Search field title
                     .or()
-                    .where('body', 'like', value, false)
-                    .end()
-                    .distinct()
-                    .exec();
+                    .where('body', 'like', value, false)        // Search field body
+                    .end()                                      // Condition end
+                    .distinct()                                 // Make sure the result is unique
+                    .orderBy('id', 'asc')                       // Order by field id in ascending
+                    .exec();                                    // Execute the query
                     
                     // Get total page from the result of find data
                     var ch = new ChunkHandler();

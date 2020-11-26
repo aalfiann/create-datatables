@@ -1,7 +1,7 @@
 # Create DataTables
 Create your own DataTables with Vanilla JavaScript.
 
-[Demo](https://jsfiddle.net/aalfiann/d0kpbwzt/10/)
+[Demo](https://jsfiddle.net/aalfiann/d0kpbwzt/11/)
 
 ### Why ?
 Because DataTables.net is :
