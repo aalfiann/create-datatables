@@ -1,7 +1,7 @@
 # Create DataTables
 Create your own DataTables with Vanilla JavaScript.
 
-[Demo](https://jsfiddle.net/aalfiann/d0kpbwzt/11/)
+[Demo](https://jsfiddle.net/aalfiann/d0kpbwzt/30/)
 
 ### Why ?
 Because DataTables.net is :
@@ -14,10 +14,10 @@ Because DataTables.net is :
 - [Bulma Template](https://github.com/BulmaTemplates/bulma-templates/blob/master/templates/hero.html)
 - [Reef.js (2.6 kB)](https://github.com/cferdinandi/reef)  
 - [Ajax (1 kB)](https://github.com/fdaciuk/ajax)
-- [Fly Json ODM (5.5 kB)](https://github.com/aalfiann/fly-json-odm)
-- [Chunk Handler (2 kB)](https://github.com/aalfiann/chunk-handler)
+- [Fly Json ODM (4.7 kB)](https://github.com/aalfiann/fly-json-odm)
+- [Chunk Handler (1,9 kB)](https://github.com/aalfiann/chunk-handler)
 
-Total size is 11.1 kB (minified and gzipped).
+Total size is 10.2 kB (minified and gzipped).
 
 ### Benefit of using this
 - Reactive UI (Modern way, alternative to Vue and React).
